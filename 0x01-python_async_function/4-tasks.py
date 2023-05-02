@@ -11,7 +11,7 @@ task_wait_random = __import__('3-tasks').task_wait_random
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
     '''Waits for a random number of seconds'''
-    list_float = []
-    for i in range(n):
-        list_float.append(await task_wait_random(max_delay))
-    return sorted(list_float)
+    wait_times = await asyncio.gather(
+        *tuple(map(lambda _: task_wait_random(max_delay), range(n)))
+    )
+    return sorted(wait_times)
